@@ -53,6 +53,51 @@ class Layer:
         self.preActivation = np.add(np.matmul(self.weights,x),self.bias)
         self.activation = self.transferFunc(self.preActivation)
         
+        print("\nAct = {}".format(self.activation))
+
+
+    
+    def backprop(self,nextLayer):
+        
+        pass
+    
+    def backPropForLastLayer(self,prediction,desired,prevLayer):
+        if(self.transferFunc == softmax):
+            #Must be One Hot Vector
+            print(prediction.shape)
+            print(desired.shape)
+
+            
+            self.gradUptoThisLayer = np.subtract(prediction,desired)
+            
+            self.gradToSendBack = np.matmul(np.transpose(self.weights),self.gradUptoThisLayer)
+            
+            print("\nUpto this layer {}".format(self.gradUptoThisLayer))
+            print("\nTo send back {}".format(self.gradToSendBack))
+        
+
+            self.weightGrad = np.matmul(self.gradUptoThisLayer,np.transpose(prevLayer.activation))
+            self.biasGrad = self.gradUptoThisLayer
+            
+            print("\nWeight Grad {}".format(self.weightGrad))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Input:
     def __init__(self,nodes):
@@ -84,19 +129,24 @@ class Model:
             j = i-1
             prevLayer = self.layerList[j]
             self.layerList[i].forward(prevLayer)
-            
         return self.layerList[-1].activation
+     
+    def backPropagate(self,x,desired):
+        prediction = self.feedForward(x)
+        self.layerList[-1].backPropForLastLayer(prediction,np.transpose(np.array([desired])),self.layerList[-2])
+        
+        
+        print("\nPrediction = {}".format(prediction))
+        print("\nDesired = {}".format(desired))
+        
         
     
 model = Model()
-model.add(Input(3))
-model.add(Layer(15))
-model.add(Layer(15))
-model.add(Layer(15))
-model.add(Layer(5,activation=softmax))
+model.add(Input(1))
+model.add(Layer(3))
+model.add(Layer(2,activation=softmax))
 
-
-y = model.feedForward([0.1,0.2,0.5])
+model.backPropagate([0.1],[1,0])
 
         
         
