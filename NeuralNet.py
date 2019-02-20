@@ -36,7 +36,11 @@ class Layer:
         self.preActivation = np.zeros((self.nodes,1))
         #hi
         self.activation = np.zeros((self.nodes,1))
-
+        
+        #BackPropvar
+        self.gradUptoThisLayer = np.zeros((self.nodes,1))
+        self.gradToSendBack = np.zeros((self.prevNodes,1))
+        
     def getWeightsandBias(self):
         return self.weights,self.bias
     
@@ -48,17 +52,16 @@ class Layer:
         
         self.preActivation = np.add(np.matmul(self.weights,x),self.bias)
         self.activation = self.transferFunc(self.preActivation)
-        print(self.activation)
         
 
 class Input:
     def __init__(self,nodes):
         self.nodes = nodes
         self.activation = np.zeros((nodes,1))
+        
     def forward(self,x):
         self.activation = np.transpose(np.array([x]))
-    
-        print(self.activation)
+
         
     def getActivation(self):
         return self.activation
@@ -87,8 +90,10 @@ class Model:
     
 model = Model()
 model.add(Input(3))
-model.add(Layer(3))
-model.add(Layer(1))
+model.add(Layer(15))
+model.add(Layer(15))
+model.add(Layer(15))
+model.add(Layer(5,activation=softmax))
 
 
 y = model.feedForward([0.1,0.2,0.5])
