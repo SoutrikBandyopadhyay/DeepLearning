@@ -4,7 +4,8 @@ Created on Wed Feb 20 17:32:02 2019
 
 @author: Soutrik
 """
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 def sigmoid(x,derivative=False):
     if(not derivative):
@@ -159,7 +160,7 @@ class Model:
         sumLoss = 0
         count = 0
         for x,y in zip(Xs,Ys):
-            loss = model.fitOnOne(x,y)
+            loss = self.fitOnOne(x,y)
             sumLoss += loss
             count+=1
             
@@ -169,7 +170,7 @@ class Model:
         sumLoss = 0
         count = 0
         for x,y in zip(Xs,Ys):
-            loss = model.evaluateOnOne(x,y)
+            loss = self.evaluateOnOne(x,y)
             sumLoss += loss
             count+=1
             
@@ -203,8 +204,7 @@ class Model:
                 
 
 if(__name__=="__main__"):
-    import numpy as np
-    import matplotlib.pyplot as plt
+
 
     model = Model(learningRate=0.2)
     model.add(Input(2))
